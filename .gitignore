@@ -1,0 +1,9 @@
+.venv
+.idea
+model
+dataset
+tokenizer
+__pycache__
+
+vendor
+bin
