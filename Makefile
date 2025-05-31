@@ -15,3 +15,6 @@ docker-build:
 
 docker-push:
 	docker push ${IMG}
+
+test-build:
+	# 需要考虑安装gpu-burn
