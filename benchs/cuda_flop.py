@@ -5,6 +5,14 @@ import torch
 from lightning.fabric.utilities.rank_zero import rank_zero_warn
 
 _CUDA_FLOPS: dict[str, dict[Union[str, torch.dtype], float]] = {
+    # baiducloud Hopper
+    "h20z baiducloud": {
+        torch.float32: 54.5e12,
+        "tfloat32": 445.4e12,
+        torch.float16: 743.3e12,
+        torch.float8: 1508.3e12,
+        torch.int8: 1558e12,
+    },
     # Hopper
     # source: https://resources.nvidia.com/en-us-tensor-core
     "h100 nvl": {
@@ -224,7 +232,9 @@ def get_available_flops(device: torch.device, dtype: Union[torch.dtype, str]) ->
     if device.type == "cuda":
         device_name = torch.cuda.get_device_name(device)
         chip = device_name.lower()
-        if "h100" in chip:
+        if "h20z" in chip:
+            chip = "h20z baiducloud"
+        elif "h100" in chip:
             if "hbm3" in chip:
                 chip = "h100 sxm"
             elif "nvl" in chip:
