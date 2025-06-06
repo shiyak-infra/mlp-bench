@@ -5,7 +5,7 @@ GO_BUILD_VARS       = GO111MODULE=on GOOS=$(TARGET_OS) GOARCH=$(ARCH)
 DOCKER_PLATFORM     = $(TARGET_OS)/$(ARCH)
 
 VERSION ?= $(shell git tag --sort=committerdate | tail -1 | cut -d"v" -f2)
-IMG ?= ghcr.io/shiyak-infra/mlp-bench:${VERSION}
+IMG ?= hub.shiyak-office.com/infra-share/mlp-bench:${VERSION}
 
 build:
 	${GO_BUILD_VARS} go build -o ./bin/mlp-bench ./

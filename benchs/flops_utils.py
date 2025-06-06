@@ -10,7 +10,7 @@ _CUDA_FLOPS: dict[str, dict[Union[str, torch.dtype], float]] = {
         torch.float32: 54.5e12,
         "tfloat32": 445.4e12,
         torch.float16: 743.3e12,
-        torch.float8: 1508.3e12,
+        torch.float8_e4m3fn: 1508.3e12,
         torch.int8: 1558e12,
     },
     # Hopper
@@ -233,6 +233,7 @@ def get_available_flops(device: torch.device, dtype: Union[torch.dtype, str]) ->
         device_name = torch.cuda.get_device_name(device)
         chip = device_name.lower()
         if "h20z" in chip:
+            # NOTE: only baiducloud has h20z-named chip
             chip = "h20z baiducloud"
         elif "h100" in chip:
             if "hbm3" in chip:

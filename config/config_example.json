@@ -1,0 +1,29 @@
+{
+  "precheck": {
+    "gpu_computation_precision": {
+      "enable": true,
+      "duration": 30
+    },
+    "gpu_flops": {
+      "enable": true,
+      "iterations": 100,
+      "warmup": 20,
+      "threshold": 0.8,
+      "dtype": "float32"
+    },
+    "nvlink": {
+      "enable": true,
+      "iterations": 100,
+      "warmup": 20,
+      "threhold": 1.0,
+      "bandwidth": 450
+    },
+    "rdma": {
+      "enable": true,
+      "iterations": 100,
+      "warmup": 20,
+      "threhold": 1.0,
+      "bandwidth": 450
+    }
+  }
+}

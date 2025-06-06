@@ -13,10 +13,10 @@ FLOPS = 423767310336
 
 epoch_count = 1
 batch_size = 32
-n_embd=2048
-n_layer=32
-n_head=16
-n_positions=1024
+n_embd = 2048
+n_layer = 32
+n_head = 16
+n_positions = 1024
 
 
 def setup_distributed():
@@ -41,7 +41,7 @@ def main():
         vocab_size=tokenizer.vocab_size,
     )
     model = GPT2LMHeadModel(config).cuda()
-    model = DDP(model, device_ids=[local_rank], output_device=local_rank) # DDP用于测试NCCL
+    model = DDP(model, device_ids=[local_rank], output_device=local_rank)  # DDP用于测试NCCL
 
     # 加载数据集
     def encode(examples):
@@ -52,6 +52,7 @@ def main():
             max_length=128,
             return_tensors='pt'
         )
+
     dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train", cache_dir="./dataset")
     dataset = dataset.map(encode, batched=True)
     dataset.set_format(type='torch', columns=['input_ids'])
@@ -81,7 +82,7 @@ def main():
     torch.cuda.synchronize()
     end_time = time.time()
     elapsed_time = end_time - start_time
-    tflops = 8 * FLOPS * total_steps * 2 / elapsed_time / 1e12 # 整个DDP的tflops
+    tflops = 8 * FLOPS * total_steps * 2 / elapsed_time / 1e12  # 整个DDP的tflops
     if dist.get_rank() == 0:
         print(f"Training time: {elapsed_time:.2f} s")
         print(f"Total steps: {total_steps}")

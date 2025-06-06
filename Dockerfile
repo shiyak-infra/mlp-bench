@@ -1,9 +1,3 @@
-FROM golang:1.24.3 AS builder
-
-WORKDIR /src
-COPY . .
-RUN make build
-
 FROM nvcr.io/nvidia/pytorch:25.04-py3
 
 RUN cd / && \
@@ -13,10 +7,6 @@ RUN cd / && \
 
 RUN pip install lightning
 
-COPY benchs /mlp-bench/benchs
-COPY main.py /mlp-bench/main.py
-COPY config.json /mlp-bench/config.json
+COPY . /mlp-bench/
 
 WORKDIR /mlp-bench
-
-ENTRYPOINT ["python", "main.py"]

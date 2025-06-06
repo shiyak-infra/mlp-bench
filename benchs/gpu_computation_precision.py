@@ -1,9 +1,12 @@
 import torch
 
+import common
+import config
 from benchs import utils, benchmark
 
 
-class GpuBurn(benchmark.Benchmark):
+# TODO(zuti.he): Make gpu-burn a python callabale package
+class GpuComputationPrecision(benchmark.Benchmark):
     def __init__(self, cwd: str = '/gpu-burn', duration: int = 30):
         super().__init__()
         self.cwd = cwd
@@ -11,11 +14,12 @@ class GpuBurn(benchmark.Benchmark):
         self.device_count = torch.cuda.device_count()
 
     def name(self):
-        return "gpu_burn"
+        return config.BENCHMARK_GPU_COMPUTATION_PRECISION
 
     def description(self):
         return "Execute gpu_burn to verify the accuracy and availability of GPU"
 
+    @common.log_execution_time
     def run(self):
         ret_code, stdout, stderr = utils.run_cmd(
             f"./gpu_burn -m 100% -stts 10 {self.duration} 2>&1 | tail -n {self.device_count}", cwd=self.cwd)
@@ -29,3 +33,10 @@ class GpuBurn(benchmark.Benchmark):
             if v != "OK":
                 return False, f"gpu {k} failed to pass gpu_burn {v}"
         return True, ""
+
+
+if __name__ == "__main__":
+    benchmark = GpuComputationPrecision()
+    ok, msg = benchmark.run()
+    if not ok:
+        print(msg)

@@ -1,16 +1,16 @@
-import torch
 from datasets import load_dataset
+from thop import profile
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from transformers import GPT2Tokenizer, GPT2Config, GPT2LMHeadModel
-from thop import profile
 
 epoch_count = 10
 batch_size = 32
-n_embd=2048
-n_layer=32
-n_head=16
-n_positions=1024
+n_embd = 2048
+n_layer = 32
+n_head = 16
+n_positions = 1024
+
 
 def main():
     # 模型和分词器
@@ -35,6 +35,7 @@ def main():
             max_length=128,
             return_tensors='pt'
         )
+
     dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train", cache_dir="./dataset")
     dataset = dataset.map(encode, batched=True)
     dataset.set_format(type='torch', columns=['input_ids'])
@@ -61,6 +62,7 @@ def main():
             loss.backward()
             optimizer.step()
             print(f"Epoch {epoch} | Loss: {loss.item()}")
+
 
 if __name__ == "__main__":
     main()
